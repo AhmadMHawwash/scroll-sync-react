@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ScrollSync, ScrollSyncNode } from './lib';
+import { ScrollSync, ScrollSyncNode } from './build';
 
 class App extends Component {
   render() {

@@ -14,7 +14,7 @@ export default [
       { file: pkg.main, format: "cjs" },
       { file: pkg.module, format: "esm" },
       {
-        file: "example/src/lib/index.js",
+        file: "example/src/build/index.js",
         format: "es",
         banner: "/* eslint-disable */",
       },
