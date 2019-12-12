@@ -3,9 +3,13 @@
 We provide you with a React.Context.Provider (`<ScrollSync/>`) Component that you wrap your "context" with, and then wrap each of your scrollable elements with a scroll listner (`<ScrollSyncNode/>`)
 And see the magic happen
 
-### installation
+## Installation
 
+```
 npm i scroll-sync-react
+```
+
+## Usage
 
 ```
 import { ScrollSync, ScrollSyncNode } from './build';
@@ -40,6 +44,8 @@ const App = () =>
 | prop  | type   | required | default   | description                                                   |
 | ----- | ------ | -------- | --------- | ------------------------------------------------------------- |
 | group | string | false    | "default" | the group of scollable elements this node will be synced with |
+
+## gify example!
 
 A photo equals a thousand word, how about a GIF!
 ![example of syncing](example.gif)
