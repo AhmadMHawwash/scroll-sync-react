@@ -9,7 +9,7 @@ And see the magic happen
 
 I needed this type of functionality on a side project, so I researched and found this library https://github.com/okonet/react-scroll-sync
 
-_I have so much similarity with this library, but it's not maintained anymore, and uses the legacy context api, which introduced unexpected bugs, so I re-implemented it with the new context API_
+_I have so much similarity with this library, but it's not maintained anymore, and uses the legacy context api, which introduced unexpected bugs, so I re-implemented it with the new context API and using react-hooks_
 
 ## codesandbox
 
