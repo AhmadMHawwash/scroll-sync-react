@@ -5,6 +5,12 @@
 We provide you with a React.Context.Provider (`<ScrollSync/>`) Component that you wrap your "context" with, and then wrap each of your scrollable elements with a scroll listner (`<ScrollSyncNode/>`)
 And see the magic happen
 
+## Note
+
+I needed this type of functionality on a side project, so I researched and found this library https://github.com/okonet/react-scroll-sync
+
+_I have so much similarity with this library, but it's not maintained anymore, and uses the legacy context api, which introduced unexpected bugs, so I re-implemented it with the new context API_
+
 ## codesandbox
 
 A codesandbox that utilizes the latest of this package
