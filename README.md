@@ -1,7 +1,14 @@
 # scroll-sync-react
 
+## Overview
+
 We provide you with a React.Context.Provider (`<ScrollSync/>`) Component that you wrap your "context" with, and then wrap each of your scrollable elements with a scroll listner (`<ScrollSyncNode/>`)
 And see the magic happen
+
+## codesandbox
+
+A codesandbox that utilizes the latest of this package
+https://codesandbox.io/s/gallant-sky-joiou
 
 ## Installation
 
@@ -49,3 +56,11 @@ const App = () =>
 
 A photo equals a thousand word, how about a GIF!
 ![example of syncing](example.gif)
+
+## Todo:
+
+- [x] Vertical scrolling sync
+- [x] Providing a codesandbox
+- [ ] Horizontal scrolling sync
+- [ ] Enable disable scroll via a prop
+- [ ] Providing tests
