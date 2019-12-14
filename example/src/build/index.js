@@ -163,7 +163,6 @@ var ScrollSync = function (props) {
 ScrollSync.defaultProps = {
     enabled: true,
 };
-//# sourceMappingURL=ScrollSync.js.map
 
 /* eslint react/no-find-dom-node: 0 */
 var toArray = function (groups) { return [].concat(groups); };
