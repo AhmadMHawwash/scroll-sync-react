@@ -68,6 +68,6 @@ A photo equals a thousand word, how about a GIF!
 
 - [x] Vertical scrolling sync
 - [x] Providing a codesandbox
-- [x] Enable/Disable scroll via a `syncable` prop
+- [x] Enable/Disable scroll sync via `syncable` prop
 - [ ] Horizontal scrolling sync
 - [ ] Providing tests
