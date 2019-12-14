@@ -54,9 +54,10 @@ const App = () =>
 
 ### ScrollSyncNode
 
-| prop  | type   | required | default   | description                                                   |
-| ----- | ------ | -------- | --------- | ------------------------------------------------------------- |
-| group | string | false    | "default" | the group of scollable elements this node will be synced with |
+| prop     | type    | required | default   | description                                                   |
+| -------- | ------- | -------- | --------- | ------------------------------------------------------------- |
+| group    | string  | false    | "default" | the group of scollable elements this node will be synced with |
+| syncable | boolean | false    | true      | to determine if scroll synced with other `ScrollSyncNode`s    |
 
 ## gify example!
 
