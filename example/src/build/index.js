@@ -1,7 +1,32 @@
 /* eslint-disable */
 import React, { useRef, useContext, useEffect } from 'react';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
 /**
  * ScrollingSyncerContext is the context to be handling scrolled nodes
  */
@@ -25,7 +50,7 @@ var ScrollSync = function (props) {
      * }
      */
     var nodesRef = useRef({});
-    var nodes = nodesRef.current;
+    var elements = nodesRef.current;
     /**
      * A simple trick to avoid calling `requestAnimationFrame` before the frame is painted, to enhance performance!
      */
@@ -36,21 +61,21 @@ var ScrollSync = function (props) {
      * @param group to be found
      */
     var findGroup = function (group) {
-        return !!nodes[group];
+        return !!elements[group];
     };
     /**
      * returns found node or undefined
      * @param node to be found
      * @param group to be searched in
      */
-    var findNode = function (node, group) {
+    var doesNodeExists = function (node, group) {
         var groupExists = findGroup(group);
         if (!groupExists)
             return false;
-        var foundNode = nodes[group].find(function (n) { return n === node; });
+        var foundNode = elements[group].find(function (element) { return element.node === node; });
         if (!foundNode)
             return false;
-        return foundNode;
+        return !!foundNode;
     };
     /**
      * this function will delightly register your node (that uses ScrollSyncNode)
@@ -59,13 +84,13 @@ var ScrollSync = function (props) {
      * @param node to be registred
      * @param groups to wich groups the node should be registered
      */
-    var registerNode = function (node, groups) {
+    var registerNode = function (element, groups) {
         groups.forEach(function (group) {
             var groupExists = findGroup(group);
             if (!groupExists) {
-                nodes[group] = [];
+                elements[group] = [];
             }
-            nodes[group].push(node);
+            elements[group].push(__assign({}, element));
         });
     };
     /**
@@ -74,14 +99,14 @@ var ScrollSync = function (props) {
      *
      * used now when unmounting nodes
      *
-     * @param node to be registred
+     * @param element to be registred
      * @param groups to wich groups the node should be registered
      */
-    var unregisterNode = function (node, groups) {
+    var unregisterNode = function (element, groups) {
         groups.forEach(function (group) {
-            var foundNode = findNode(node, group);
-            if (foundNode) {
-                nodes[group].splice(nodes[group].indexOf(node), 1);
+            var doesNodeExist = doesNodeExists(element.node, group);
+            if (doesNodeExist) {
+                elements[group].splice(elements[group].findIndex(function (e) { return element.node === e.node; }), 1);
             }
         });
     };
@@ -104,10 +129,10 @@ var ScrollSync = function (props) {
      */
     var syncScrollPositions = function (scrolledNode, groups) {
         groups.forEach(function (group) {
-            nodes[group].forEach(function (node) {
+            elements[group].forEach(function (element) {
                 /* For all nodes other than the currently scrolled one */
-                if (scrolledNode !== node) {
-                    syncScrollPosition(scrolledNode, node);
+                if (scrolledNode !== element.node) {
+                    element.syncable && syncScrollPosition(scrolledNode, element.node);
                 }
             });
         });
@@ -138,25 +163,29 @@ var ScrollSync = function (props) {
 ScrollSync.defaultProps = {
     enabled: true,
 };
+//# sourceMappingURL=ScrollSync.js.map
 
 /* eslint react/no-find-dom-node: 0 */
 var toArray = function (groups) { return [].concat(groups); };
 var ScrollSyncNode = function (_a) {
-    var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b;
-    var _c = useContext(ScrollingSyncerContext), registerNode = _c.registerNode, unregisterNode = _c.unregisterNode, onScroll = _c.onScroll;
+    var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.syncable, syncable = _c === void 0 ? true : _c;
+    var _d = useContext(ScrollingSyncerContext), registerNode = _d.registerNode, unregisterNode = _d.unregisterNode, onScroll = _d.onScroll;
     var ref = useRef(null);
     useEffect(function () {
-        registerNode(ref.current, toArray(group));
-        return function () { return unregisterNode(ref.current, toArray(group)); };
+        var syncableElement = { node: ref.current, syncable: syncable };
+        registerNode(syncableElement, toArray(group));
+        return function () { return unregisterNode(syncableElement, toArray(group)); };
     }, []);
+    useEffect(function () {
+        var syncableElement = { node: ref.current, syncable: syncable };
+        unregisterNode(syncableElement, toArray(group));
+        registerNode(syncableElement, toArray(group));
+        return function () { return unregisterNode(syncableElement, toArray(group)); };
+    }, [syncable, group]);
     return React.cloneElement(children, {
         ref: ref,
-        onScroll: function (e) { return onScroll(e, toArray(group)); },
+        onScroll: function (e) { return syncable && onScroll(e, toArray(group)); },
     });
-};
-ScrollSyncNode.defaultProps = {
-    group: "default",
-    enabled: true,
 };
 
 export { ScrollSync, ScrollSyncNode };

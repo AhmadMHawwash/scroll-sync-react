@@ -11,15 +11,28 @@ interface RecordMap<T> {
   [key: string]: T;
 }
 
+/**
+ * node should be scrollable
+ */
+type Node = EventTarget & HTMLElement;
+
+/**
+ * node should be scrollable
+ */
+interface SyncableElement {
+  node: Node;
+  syncable: boolean;
+}
+
 interface ScrollingSyncerContextValues {
   /**
    * register node to be synced with other scrolled nodes
    */
-  registerNode: (node: Node, groups: string[]) => void;
+  registerNode: (node: SyncableElement, groups: string[]) => void;
   /**
    * unregister node to stop syncing with other scrolled nodes
    */
-  unregisterNode: (node: Node, group: string[]) => void;
+  unregisterNode: (node: SyncableElement, group: string[]) => void;
   /**
    * scroll handler for each node.onScroll
    */
@@ -27,16 +40,11 @@ interface ScrollingSyncerContextValues {
 }
 
 /**
- * node should be scrollable
- */
-type Node = EventTarget & HTMLElement;
-
-/**
  * ScrollingSyncerContext is the context to be handling scrolled nodes
  */
 export const ScrollingSyncerContext: React.Context<ScrollingSyncerContextValues> = React.createContext({
-  registerNode: (_node: Node, _group: string[]) => {},
-  unregisterNode: (_node: Node, _group: string[]) => {},
+  registerNode: (_node: SyncableElement, _group: string[]) => {},
+  unregisterNode: (_node: SyncableElement, _group: string[]) => {},
   onScroll: (_e, _groups: string[]) => {},
 });
 
@@ -54,8 +62,8 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    *  groupC: [node1, node4],
    * }
    */
-  const nodesRef = useRef<RecordMap<any[]>>({});
-  const nodes = nodesRef.current;
+  const nodesRef = useRef<RecordMap<SyncableElement[]>>({});
+  const elements = nodesRef.current;
   /**
    * A simple trick to avoid calling `requestAnimationFrame` before the frame is painted, to enhance performance!
    */
@@ -67,7 +75,7 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    * @param group to be found
    */
   const findGroup = (group: string): boolean => {
-    return !!nodes[group];
+    return !!elements[group];
   };
 
   /**
@@ -75,14 +83,14 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    * @param node to be found
    * @param group to be searched in
    */
-  const findNode = (node: Node, group: string): boolean => {
+  const doesNodeExists = (node: Node, group: string): boolean => {
     const groupExists = findGroup(group);
     if (!groupExists) return false;
 
-    const foundNode = nodes[group].find(n => n === node);
+    const foundNode = elements[group].find(element => element.node === node);
     if (!foundNode) return false;
 
-    return foundNode;
+    return !!foundNode;
   };
 
   /**
@@ -92,14 +100,14 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    * @param node to be registred
    * @param groups to wich groups the node should be registered
    */
-  const registerNode = (node: Node, groups: string[]) => {
+  const registerNode = (element: SyncableElement, groups: string[]) => {
     groups.forEach(group => {
       const groupExists = findGroup(group);
       if (!groupExists) {
-        nodes[group] = [];
+        elements[group] = [];
       }
 
-      nodes[group].push(node);
+      elements[group].push({ ...element });
     });
   };
 
@@ -109,14 +117,17 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    *
    * used now when unmounting nodes
    *
-   * @param node to be registred
+   * @param element to be registred
    * @param groups to wich groups the node should be registered
    */
-  const unregisterNode = (node: Node, groups: string[]) => {
+  const unregisterNode = (element: SyncableElement, groups: string[]) => {
     groups.forEach(group => {
-      const foundNode = findNode(node, group);
-      if (foundNode) {
-        nodes[group].splice(nodes[group].indexOf(node), 1);
+      const doesNodeExist = doesNodeExists(element.node, group);
+      if (doesNodeExist) {
+        elements[group].splice(
+          elements[group].findIndex(e => element.node === e.node),
+          1,
+        );
       }
     });
   };
@@ -143,10 +154,10 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    */
   const syncScrollPositions = (scrolledNode: Node, groups: string[]) => {
     groups.forEach(group => {
-      nodes[group].forEach(node => {
+      elements[group].forEach(element => {
         /* For all nodes other than the currently scrolled one */
-        if (scrolledNode !== node) {
-          syncScrollPosition(scrolledNode, node);
+        if (scrolledNode !== element.node) {
+          element.syncable && syncScrollPosition(scrolledNode, element.node);
         }
       });
     });

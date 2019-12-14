@@ -4,24 +4,31 @@ export interface ScrollSyncProps {
     /**syncing enable control */
     enabled?: boolean;
 }
+/**
+ * node should be scrollable
+ */
+declare type Node = EventTarget & HTMLElement;
+/**
+ * node should be scrollable
+ */
+interface SyncableElement {
+    node: Node;
+    syncable: boolean;
+}
 interface ScrollingSyncerContextValues {
     /**
      * register node to be synced with other scrolled nodes
      */
-    registerNode: (node: Node, groups: string[]) => void;
+    registerNode: (node: SyncableElement, groups: string[]) => void;
     /**
      * unregister node to stop syncing with other scrolled nodes
      */
-    unregisterNode: (node: Node, group: string[]) => void;
+    unregisterNode: (node: SyncableElement, group: string[]) => void;
     /**
      * scroll handler for each node.onScroll
      */
     onScroll: (e: React.UIEvent<HTMLElement>, groups: string[]) => void;
 }
-/**
- * node should be scrollable
- */
-declare type Node = EventTarget & HTMLElement;
 /**
  * ScrollingSyncerContext is the context to be handling scrolled nodes
  */

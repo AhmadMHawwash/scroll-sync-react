@@ -13,7 +13,7 @@ interface ScrollSyncNodeProps {
     /**
      * if the scrolling is enabled or not
      */
-    enabled?: boolean;
+    syncable?: boolean;
 }
 declare const ScrollSyncNode: FC<ScrollSyncNodeProps>;
 export default ScrollSyncNode;

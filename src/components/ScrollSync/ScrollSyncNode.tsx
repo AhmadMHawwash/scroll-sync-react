@@ -18,30 +18,34 @@ interface ScrollSyncNodeProps {
   /**
    * if the scrolling is enabled or not
    */
-  enabled?: boolean;
+  syncable?: boolean;
 }
 
 const toArray = (groups: string | string[]) => ([] as string[]).concat(groups);
 
-const ScrollSyncNode: FC<ScrollSyncNodeProps> = ({ children, group = "default" }) => {
+const ScrollSyncNode: FC<ScrollSyncNodeProps> = ({ children, group = "default", syncable = true }) => {
   const { registerNode, unregisterNode, onScroll } = useContext(ScrollingSyncerContext);
 
   const ref = useRef(null);
 
   useEffect(() => {
-    registerNode(ref.current as any, toArray(group));
-    return () => unregisterNode(ref.current as any, toArray(group));
+    const syncableElement = { node: ref.current as any, syncable };
+    registerNode(syncableElement, toArray(group));
+    return () => unregisterNode(syncableElement, toArray(group));
   }, []);
+
+  useEffect(() => {
+    const syncableElement = { node: ref.current as any, syncable };
+
+    unregisterNode(syncableElement, toArray(group));
+    registerNode(syncableElement, toArray(group));
+    return () => unregisterNode(syncableElement, toArray(group));
+  }, [syncable, group]);
 
   return React.cloneElement(children, {
     ref,
-    onScroll: (e: React.UIEvent<HTMLElement>) => onScroll(e, toArray(group)),
+    onScroll: (e: React.UIEvent<HTMLElement>) => syncable && onScroll(e, toArray(group)),
   });
-};
-
-ScrollSyncNode.defaultProps = {
-  group: "default",
-  enabled: true,
 };
 
 export default ScrollSyncNode;
