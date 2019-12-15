@@ -6,45 +6,59 @@ export const HorizontalExample = () => (
   <ScrollSync>
     <>
       <ScrollSyncNode>
-        <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 150 }}>
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
+        <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 300 }}>
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+        </div>
+      </ScrollSyncNode>
+      <ScrollSyncNode group="Horizontal_A">
+        <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 300 }}>
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
         </div>
       </ScrollSyncNode>
       <ScrollSyncNode>
-        <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 200 }}>
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
+        <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 300 }}>
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
+          <DummyBox text="group default" />
         </div>
       </ScrollSyncNode>
-      <ScrollSyncNode>
-        <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 250 }}>
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
-          <DummyBox />
+      <ScrollSyncNode group="Horizontal_A">
+        <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 300 }}>
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
+          <DummyBox text="group Horizontal_A" width={150} />
         </div>
       </ScrollSyncNode>
     </>
