@@ -116,11 +116,15 @@ var ScrollSync = function (props) {
      * @param node other node to be scroll-synced
      */
     var syncScrollPosition = function (scrolledNode, node) {
-        var scrollTop = scrolledNode.scrollTop, scrollHeight = scrolledNode.scrollHeight, offsetHeight = scrolledNode.offsetHeight;
+        var scrollTop = scrolledNode.scrollTop, scrollHeight = scrolledNode.scrollHeight, offsetHeight = scrolledNode.offsetHeight, scrollLeft = scrolledNode.scrollLeft, scrollWidth = scrolledNode.scrollWidth, offsetLeft = scrolledNode.offsetLeft, offsetWidth = scrolledNode.offsetWidth;
         //calculate percentage of scrolling of the scrolledNode
-        var percentage = scrollTop / (scrollHeight - offsetHeight);
+        var percentagePerHeight = scrollTop / (scrollHeight - offsetHeight);
+        //calculate percentage of scrolling of the scrolledNode
+        var percentagePerWidth = scrollLeft / (scrollWidth - offsetWidth);
         //Apply calculated scrolling
-        node.scrollTop = Math.round(percentage * (node.scrollHeight - node.offsetHeight));
+        node.scrollTop = Math.round(percentagePerHeight * (node.scrollHeight - node.offsetHeight));
+        //Apply calculated scrolling
+        node.scrollLeft = Math.round(percentagePerWidth * (node.scrollWidth - node.offsetWidth));
     };
     /**
      * We sync all other nodes in the registered groups
