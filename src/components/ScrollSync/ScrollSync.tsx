@@ -138,13 +138,17 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    * @param node other node to be scroll-synced
    */
   const syncScrollPosition = (scrolledNode: Node, node: Node) => {
-    const { scrollTop, scrollHeight, offsetHeight } = scrolledNode;
+    const { scrollTop, scrollHeight, offsetHeight, scrollLeft, scrollWidth, offsetLeft, offsetWidth } = scrolledNode;
 
     //calculate percentage of scrolling of the scrolledNode
-    const percentage = scrollTop / (scrollHeight - offsetHeight);
+    const percentagePerHeight = scrollTop / (scrollHeight - offsetHeight);
+    //calculate percentage of scrolling of the scrolledNode
+    const percentagePerWidth = scrollLeft / (scrollWidth - offsetWidth);
 
     //Apply calculated scrolling
-    node.scrollTop = Math.round(percentage * (node.scrollHeight - node.offsetHeight));
+    node.scrollTop = Math.round(percentagePerHeight * (node.scrollHeight - node.offsetHeight));
+    //Apply calculated scrolling
+    node.scrollLeft = Math.round(percentagePerWidth * (node.scrollWidth - node.offsetWidth));
   };
 
   /**
