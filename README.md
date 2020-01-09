@@ -19,7 +19,7 @@ https://codesandbox.io/s/gallant-sky-joiou
 ## Installation
 
 ```
-npm i scroll-sync-react
+npm i scroll-sync-react --save
 ```
 
 ## Usage
