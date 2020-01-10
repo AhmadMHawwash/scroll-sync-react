@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import HorizontalExample from './Components/HorizontalExample';
 import VerticalExample from './Components/VerticalExample';
+import VerticalHorizontalExample from './Components/VerticalHorizontalExample';
 
 class App extends Component {
   render() {
@@ -10,6 +11,8 @@ class App extends Component {
         <VerticalExample />
         <br />
         <HorizontalExample />
+        <br />
+        <VerticalHorizontalExample />
       </>
     );
   }
