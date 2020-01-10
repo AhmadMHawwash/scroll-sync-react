@@ -85,4 +85,4 @@ export const VerticalHorizontalExample = () => (
   </ScrollSync>
 );
 
-export default HorizontalExample;
+export default VerticalHorizontalExample;
