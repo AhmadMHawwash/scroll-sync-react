@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { ScrollConfig } from "./ScrollSyncNode";
 export interface ScrollSyncProps {
     children: React.ReactNode;
     /**syncing enable control */
@@ -13,7 +14,7 @@ declare type Node = EventTarget & HTMLElement;
  */
 interface SyncableElement {
     node: Node;
-    syncable: boolean;
+    scroll: ScrollConfig;
 }
 interface ScrollingSyncerContextValues {
     /**

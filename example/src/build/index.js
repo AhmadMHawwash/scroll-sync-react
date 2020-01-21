@@ -123,7 +123,6 @@ var ScrollSync = function (props) {
         var percentagePerWidth = scrollLeft / (scrollWidth - offsetWidth);
         //Apply calculated scrolling
         node.scrollTop = Math.round(percentagePerHeight * (node.scrollHeight - node.offsetHeight));
-        //Apply calculated scrolling
         node.scrollLeft = Math.round(percentagePerWidth * (node.scrollWidth - node.offsetWidth));
     };
     /**
@@ -136,7 +135,9 @@ var ScrollSync = function (props) {
             elements[group].forEach(function (element) {
                 /* For all nodes other than the currently scrolled one */
                 if (scrolledNode !== element.node) {
-                    element.syncable && syncScrollPosition(scrolledNode, element.node);
+                    var isEnabled = element.scroll === "two-way";
+                    var isSynced = element.scroll === "synced-only";
+                    (isEnabled || isSynced) && syncScrollPosition(scrolledNode, element.node);
                 }
             });
         });
@@ -171,23 +172,30 @@ ScrollSync.defaultProps = {
 /* eslint react/no-find-dom-node: 0 */
 var toArray = function (groups) { return [].concat(groups); };
 var ScrollSyncNode = function (_a) {
-    var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.syncable, syncable = _c === void 0 ? true : _c;
+    var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.scroll, scroll = _c === void 0 ? "two-way" : _c;
     var _d = useContext(ScrollingSyncerContext), registerNode = _d.registerNode, unregisterNode = _d.unregisterNode, onScroll = _d.onScroll;
     var ref = useRef(null);
     useEffect(function () {
-        var syncableElement = { node: ref.current, syncable: syncable };
+        var syncableElement = { node: ref.current, scroll: scroll };
         registerNode(syncableElement, toArray(group));
         return function () { return unregisterNode(syncableElement, toArray(group)); };
     }, []);
     useEffect(function () {
-        var syncableElement = { node: ref.current, syncable: syncable };
+        var syncableElement = { node: ref.current, scroll: scroll };
         unregisterNode(syncableElement, toArray(group));
         registerNode(syncableElement, toArray(group));
         return function () { return unregisterNode(syncableElement, toArray(group)); };
-    }, [syncable, group]);
+    }, [scroll, group]);
+    var isSyncer = scroll === "syncer-only";
+    var isEnabled = scroll === "two-way";
     return React.cloneElement(children, {
         ref: ref,
-        onScroll: function (e) { return syncable && onScroll(e, toArray(group)); },
+        onScroll: function (e) {
+            return (isSyncer || isEnabled) && onScroll(e, toArray(group));
+        },
+        onWheel: function (e) {
+            return (isSyncer || isEnabled) && onScroll(e, toArray(group));
+        },
     });
 };
 

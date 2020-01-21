@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC, useRef } from "react";
+import { ScrollConfig } from "./ScrollSyncNode";
 
 export interface ScrollSyncProps {
   children: React.ReactNode;
@@ -21,7 +22,7 @@ type Node = EventTarget & HTMLElement;
  */
 interface SyncableElement {
   node: Node;
-  syncable: boolean;
+  scroll: ScrollConfig;
 }
 
 interface ScrollingSyncerContextValues {
@@ -147,7 +148,6 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
 
     //Apply calculated scrolling
     node.scrollTop = Math.round(percentagePerHeight * (node.scrollHeight - node.offsetHeight));
-    //Apply calculated scrolling
     node.scrollLeft = Math.round(percentagePerWidth * (node.scrollWidth - node.offsetWidth));
   };
 
@@ -161,7 +161,9 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
       elements[group].forEach(element => {
         /* For all nodes other than the currently scrolled one */
         if (scrolledNode !== element.node) {
-          element.syncable && syncScrollPosition(scrolledNode, element.node);
+          const isEnabled = element.scroll === "two-way";
+          const isSynced = element.scroll === "synced-only";
+          (isEnabled || isSynced) && syncScrollPosition(scrolledNode, element.node);
         }
       });
     });

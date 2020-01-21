@@ -6,7 +6,7 @@ export const VerticalExample = () => (
   <ScrollSync>
     <div style={{ display: 'flex', position: 'relative', height: 300 }}>
       <Banner title="Vertical Example" />
-      <ScrollSyncNode group="a">
+      <ScrollSyncNode group="a" scroll="syncer-only">
         <div style={{ overflow: 'auto' }}>
           <section style={{ height: 1000 }}>
             <h1>This is group `a`</h1>

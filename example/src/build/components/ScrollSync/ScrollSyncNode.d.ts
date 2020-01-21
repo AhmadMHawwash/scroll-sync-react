@@ -4,6 +4,7 @@ import React, { FC } from "react";
  *
  * Wrap your content in it to keep its scroll position in sync with other panes
  */
+export declare type ScrollConfig = "synced-only" | "syncer-only" | "two-way";
 interface ScrollSyncNodeProps {
     children: React.ReactElement;
     /**
@@ -13,7 +14,7 @@ interface ScrollSyncNodeProps {
     /**
      * if the scrolling is enabled or not
      */
-    syncable?: boolean;
+    scroll?: ScrollConfig;
 }
 declare const ScrollSyncNode: FC<ScrollSyncNodeProps>;
 export default ScrollSyncNode;
