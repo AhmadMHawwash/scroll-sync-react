@@ -202,10 +202,16 @@ var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
         var syncableElement = { node: ref.current, scroll: scroll };
         registerNode(syncableElement, toArray(group));
         //@ts-ignore
-        ref.current.onwheel = applySelfLockAxis;
+        ref.current.addEventListener("wheel", applySelfLockAxis, { passive: false });
         //@ts-ignore
-        ref.current.ontouchmove = applySelfLockAxis;
-        return function () { return unregisterNode(syncableElement, toArray(group)); };
+        ref.current.addEventListener("touchmove", applySelfLockAxis, { passive: false });
+        return function () {
+            unregisterNode(syncableElement, toArray(group));
+            //@ts-ignore
+            ref.current.removeEventListener("wheel", applySelfLockAxis);
+            //@ts-ignore
+            ref.current.removeEventListener("touchmove", applySelfLockAxis);
+        };
     }, []);
     useEffect(function () {
         //@ts-ignore ref.current will difintly exist
