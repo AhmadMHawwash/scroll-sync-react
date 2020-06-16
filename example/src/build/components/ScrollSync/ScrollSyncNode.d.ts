@@ -21,5 +21,5 @@ interface ScrollSyncNodeProps {
      */
     selfLockAxis?: LockAxis;
 }
-declare const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps & React.RefAttributes<HTMLElement>>;
+declare const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps & React.RefAttributes<EventTarget & HTMLElement>>;
 export default ScrollSyncNode;

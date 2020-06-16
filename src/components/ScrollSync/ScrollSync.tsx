@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC, useRef } from "react";
 import { ScrollConfig } from "./ScrollSyncNode";
@@ -15,7 +16,7 @@ interface RecordMap<T> {
 /**
  * node should be scrollable
  */
-type Node = EventTarget & HTMLElement;
+type Node = (EventTarget & HTMLElement) | null;
 
 /**
  * node should be scrollable
@@ -139,6 +140,8 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    * @param node other node to be scroll-synced
    */
   const syncScrollPosition = (scrolledNode: Node, node: Node) => {
+    if (!scrolledNode || !node) return;
+
     const { scrollTop, scrollHeight, offsetHeight, scrollLeft, scrollWidth, offsetLeft, offsetWidth } = scrolledNode;
 
     //calculate percentage of scrolling of the scrolledNode

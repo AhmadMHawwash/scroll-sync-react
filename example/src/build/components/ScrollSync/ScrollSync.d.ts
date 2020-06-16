@@ -8,7 +8,7 @@ export interface ScrollSyncProps {
 /**
  * node should be scrollable
  */
-declare type Node = EventTarget & HTMLElement;
+declare type Node = (EventTarget & HTMLElement) | null;
 /**
  * node should be scrollable
  */

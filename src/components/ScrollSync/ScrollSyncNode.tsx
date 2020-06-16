@@ -39,11 +39,17 @@ const getMovingAxis: (e: WheelEvent) => LockAxis = (e: WheelEvent) => {
 
 // eslint-disable-next-line react/display-name
 const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
-  React.RefAttributes<HTMLElement>> = forwardRef<HTMLElement, ScrollSyncNodeProps>(
+  React.RefAttributes<EventTarget & HTMLElement>> = forwardRef<EventTarget & HTMLElement, ScrollSyncNodeProps>(
   ({ children, group = "default", scroll = "two-way", selfLockAxis = null }, forwardedRef) => {
     const { registerNode, unregisterNode, onScroll } = useContext(ScrollingSyncerContext);
 
-    const ref = forwardedRef || useRef<HTMLElement>(null);
+    const ref = useRef<EventTarget & HTMLElement>(null);
+
+    useEffect(() => {
+      if (typeof forwardedRef === "function") {
+        forwardedRef(ref.current);
+      }
+    }, []);
 
     const applySelfLockAxis = (event: WheelEvent) => {
       const movingAxis = getMovingAxis(event);
@@ -57,21 +63,14 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
     };
 
     useEffect(() => {
-      //@ts-ignore ref.current will definetly exist
       const syncableElement = { node: ref.current, scroll };
-      registerNode(syncableElement, toArray(group));
+      if (syncableElement) registerNode(syncableElement, toArray(group));
 
-      //@ts-ignore
-      ref.current.addEventListener("wheel", applySelfLockAxis, { passive: false });
-      //@ts-ignore
-      ref.current.addEventListener("touchmove", applySelfLockAxis, { passive: false });
+      ref.current?.addEventListener("wheel", applySelfLockAxis, { passive: false });
 
       return () => {
         unregisterNode(syncableElement, toArray(group));
-        //@ts-ignore
-        ref.current.removeEventListener("wheel", applySelfLockAxis);
-        //@ts-ignore
-        ref.current.removeEventListener("touchmove", applySelfLockAxis);
+        ref.current?.removeEventListener("wheel", applySelfLockAxis);
       };
     }, []);
 

@@ -116,6 +116,8 @@ var ScrollSync = function (props) {
      * @param node other node to be scroll-synced
      */
     var syncScrollPosition = function (scrolledNode, node) {
+        if (!scrolledNode || !node)
+            return;
         var scrollTop = scrolledNode.scrollTop, scrollHeight = scrolledNode.scrollHeight, offsetHeight = scrolledNode.offsetHeight, scrollLeft = scrolledNode.scrollLeft, scrollWidth = scrolledNode.scrollWidth, offsetLeft = scrolledNode.offsetLeft, offsetWidth = scrolledNode.offsetWidth;
         //calculate percentage of scrolling of the scrolledNode
         var percentagePerHeight = scrollTop / (scrollHeight - offsetHeight);
@@ -184,7 +186,12 @@ var getMovingAxis = function (e) {
 var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
     var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.scroll, scroll = _c === void 0 ? "two-way" : _c, _d = _a.selfLockAxis, selfLockAxis = _d === void 0 ? null : _d;
     var _e = useContext(ScrollingSyncerContext), registerNode = _e.registerNode, unregisterNode = _e.unregisterNode, onScroll = _e.onScroll;
-    var ref = forwardedRef || useRef(null);
+    var ref = useRef(null);
+    useEffect(function () {
+        if (typeof forwardedRef === "function") {
+            forwardedRef(ref.current);
+        }
+    }, []);
     var applySelfLockAxis = function (event) {
         var movingAxis = getMovingAxis(event);
         if (selfLockAxis === "X" && movingAxis === "X") {
@@ -198,19 +205,15 @@ var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
         }
     };
     useEffect(function () {
-        //@ts-ignore ref.current will definetly exist
+        var _a;
         var syncableElement = { node: ref.current, scroll: scroll };
-        registerNode(syncableElement, toArray(group));
-        //@ts-ignore
-        ref.current.addEventListener("wheel", applySelfLockAxis, { passive: false });
-        //@ts-ignore
-        ref.current.addEventListener("touchmove", applySelfLockAxis, { passive: false });
+        if (syncableElement)
+            registerNode(syncableElement, toArray(group));
+        (_a = ref.current) === null || _a === void 0 ? void 0 : _a.addEventListener("wheel", applySelfLockAxis, { passive: false });
         return function () {
+            var _a;
             unregisterNode(syncableElement, toArray(group));
-            //@ts-ignore
-            ref.current.removeEventListener("wheel", applySelfLockAxis);
-            //@ts-ignore
-            ref.current.removeEventListener("touchmove", applySelfLockAxis);
+            (_a = ref.current) === null || _a === void 0 ? void 0 : _a.removeEventListener("wheel", applySelfLockAxis);
         };
     }, []);
     useEffect(function () {
