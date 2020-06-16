@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 /* eslint react/no-find-dom-node: 0 */
 
-import React, { FC, useContext, useEffect, useRef, forwardRef, Ref } from "react";
+import React, { forwardRef, useContext, useEffect, useRef } from "react";
 import { ScrollingSyncerContext } from "./ScrollSync";
 
 /**
