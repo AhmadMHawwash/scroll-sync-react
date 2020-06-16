@@ -169,17 +169,42 @@ ScrollSync.defaultProps = {
     enabled: true,
 };
 
-/* eslint react/no-find-dom-node: 0 */
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 var toArray = function (groups) { return [].concat(groups); };
+var getMovingAxis = function (e) {
+    if (e.deltaX > 0 || e.deltaX < 0)
+        return "X";
+    if (e.deltaY > 0 || e.deltaY < 0)
+        return "Y";
+    if ((e.deltaY > 0 || e.deltaY < 0) && (e.deltaX > 0 || e.deltaX < 0))
+        return "XY";
+    return null;
+};
 // eslint-disable-next-line react/display-name
 var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
-    var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.scroll, scroll = _c === void 0 ? "two-way" : _c;
-    var _d = useContext(ScrollingSyncerContext), registerNode = _d.registerNode, unregisterNode = _d.unregisterNode, onScroll = _d.onScroll;
+    var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.scroll, scroll = _c === void 0 ? "two-way" : _c, _d = _a.selfLockAxis, selfLockAxis = _d === void 0 ? null : _d;
+    var _e = useContext(ScrollingSyncerContext), registerNode = _e.registerNode, unregisterNode = _e.unregisterNode, onScroll = _e.onScroll;
     var ref = forwardedRef || useRef(null);
+    var applySelfLockAxis = function (event) {
+        var movingAxis = getMovingAxis(event);
+        if (selfLockAxis === "X" && movingAxis === "X") {
+            event.preventDefault();
+        }
+        else if (selfLockAxis === "Y" && movingAxis === "Y") {
+            event.preventDefault();
+        }
+        else if (selfLockAxis === "XY" && (movingAxis === "XY" || movingAxis === "X" || movingAxis === "Y")) {
+            event.preventDefault();
+        }
+    };
     useEffect(function () {
-        //@ts-ignore ref.current will difinetly exist
+        //@ts-ignore ref.current will definetly exist
         var syncableElement = { node: ref.current, scroll: scroll };
         registerNode(syncableElement, toArray(group));
+        //@ts-ignore
+        ref.current.onwheel = applySelfLockAxis;
+        //@ts-ignore
+        ref.current.ontouchmove = applySelfLockAxis;
         return function () { return unregisterNode(syncableElement, toArray(group)); };
     }, []);
     useEffect(function () {
@@ -187,7 +212,6 @@ var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
         var syncableElement = { node: ref.current, scroll: scroll };
         unregisterNode(syncableElement, toArray(group));
         registerNode(syncableElement, toArray(group));
-        console.log(ref);
         return function () { return unregisterNode(syncableElement, toArray(group)); };
     }, [scroll, group]);
     var isSyncer = scroll === "syncer-only";
@@ -203,6 +227,5 @@ var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
     });
 });
 ScrollSyncNode.displayName = "ScrollSyncNode";
-//# sourceMappingURL=ScrollSyncNode.js.map
 
 export { ScrollSync, ScrollSyncNode };
