@@ -54,10 +54,10 @@ const App = () =>
 
 ### ScrollSyncNode
 
-| prop     | type    | required | default   | description                                                   |
-| -------- | ------- | -------- | --------- | ------------------------------------------------------------- |
-| group    | string  | false    | "default" | the group of scollable elements this node will be synced with |
-| syncable | boolean | false    | true      | to determine if scroll synced with other `ScrollSyncNode`s    |
+| prop   | type                                        | required | default   | description                                                    |
+| ------ | ------------------------------------------- | -------- | --------- | -------------------------------------------------------------- |
+| group  | string                                      | false    | "default" | the group of scollable elements this node will be synced with  |
+| scroll | `"two-way" | "synced-only" | "syncer-only"` | false    | "two-way" | to determine scroll configuration with other `ScrollSyncNode`s |
 
 ## gify example!
 
@@ -68,7 +68,7 @@ A photo equals a thousand word, how about a GIF!
 
 - [x] Vertical scrolling sync
 - [x] Providing a codesandbox
-- [x] Enable/Disable scroll sync via `syncable` prop
+- [x] Configure scroll sync via `scroll` prop
 - [x] Horizontal scrolling sync
-- [ ] lock axis (locking horizontal or vertical sync)
+- [x] lock axis (locking horizontal or vertical of ScrollSyncNode)
 - [ ] Providing tests
