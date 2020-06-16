@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, forwardRef, useContext, useEffect } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -171,19 +171,23 @@ ScrollSync.defaultProps = {
 
 /* eslint react/no-find-dom-node: 0 */
 var toArray = function (groups) { return [].concat(groups); };
-var ScrollSyncNode = function (_a) {
+// eslint-disable-next-line react/display-name
+var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
     var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.scroll, scroll = _c === void 0 ? "two-way" : _c;
     var _d = useContext(ScrollingSyncerContext), registerNode = _d.registerNode, unregisterNode = _d.unregisterNode, onScroll = _d.onScroll;
-    var ref = useRef(null);
+    var ref = forwardedRef || useRef(null);
     useEffect(function () {
+        //@ts-ignore ref.current will difinetly exist
         var syncableElement = { node: ref.current, scroll: scroll };
         registerNode(syncableElement, toArray(group));
         return function () { return unregisterNode(syncableElement, toArray(group)); };
     }, []);
     useEffect(function () {
+        //@ts-ignore ref.current will difintly exist
         var syncableElement = { node: ref.current, scroll: scroll };
         unregisterNode(syncableElement, toArray(group));
         registerNode(syncableElement, toArray(group));
+        console.log(ref);
         return function () { return unregisterNode(syncableElement, toArray(group)); };
     }, [scroll, group]);
     var isSyncer = scroll === "syncer-only";
@@ -197,6 +201,8 @@ var ScrollSyncNode = function (_a) {
             return (isSyncer || isEnabled) && onScroll(e, toArray(group));
         },
     });
-};
+});
+ScrollSyncNode.displayName = "ScrollSyncNode";
+//# sourceMappingURL=ScrollSyncNode.js.map
 
 export { ScrollSync, ScrollSyncNode };

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 /**
  * ScrollSyncNode Component
  *
@@ -16,5 +16,5 @@ interface ScrollSyncNodeProps {
      */
     scroll?: ScrollConfig;
 }
-declare const ScrollSyncNode: FC<ScrollSyncNodeProps>;
+declare const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps & React.RefAttributes<HTMLElement>>;
 export default ScrollSyncNode;
