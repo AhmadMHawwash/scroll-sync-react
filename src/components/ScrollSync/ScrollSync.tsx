@@ -7,6 +7,8 @@ export interface ScrollSyncProps {
   children: React.ReactNode;
   /**syncing enable control */
   enabled?: boolean;
+  /** In case we want scroll to be proportionally applied regardless of the width and/or height*/
+  proportional?: boolean;
 }
 
 interface RecordMap<T> {
@@ -144,6 +146,12 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
 
     const { scrollTop, scrollHeight, offsetHeight, scrollLeft, scrollWidth, offsetLeft, offsetWidth } = scrolledNode;
 
+    if (!props.proportional) {
+      node.scrollLeft = scrollLeft;
+      node.scrollTop = scrollTop;
+      return;
+    }
+
     //calculate percentage of scrolling of the scrolledNode
     const percentagePerHeight = scrollTop / (scrollHeight - offsetHeight);
     //calculate percentage of scrolling of the scrolledNode
@@ -205,6 +213,7 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
 
 ScrollSync.defaultProps = {
   enabled: true,
+  proportional: true,
 };
 
 export default ScrollSync;

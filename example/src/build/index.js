@@ -119,6 +119,11 @@ var ScrollSync = function (props) {
         if (!scrolledNode || !node)
             return;
         var scrollTop = scrolledNode.scrollTop, scrollHeight = scrolledNode.scrollHeight, offsetHeight = scrolledNode.offsetHeight, scrollLeft = scrolledNode.scrollLeft, scrollWidth = scrolledNode.scrollWidth, offsetLeft = scrolledNode.offsetLeft, offsetWidth = scrolledNode.offsetWidth;
+        if (!props.proportional) {
+            node.scrollLeft = scrollLeft;
+            node.scrollTop = scrollTop;
+            return;
+        }
         //calculate percentage of scrolling of the scrolledNode
         var percentagePerHeight = scrollTop / (scrollHeight - offsetHeight);
         //calculate percentage of scrolling of the scrolledNode
@@ -169,6 +174,7 @@ var ScrollSync = function (props) {
 };
 ScrollSync.defaultProps = {
     enabled: true,
+    proportional: true,
 };
 
 /* eslint-disable @typescript-eslint/ban-ts-ignore */

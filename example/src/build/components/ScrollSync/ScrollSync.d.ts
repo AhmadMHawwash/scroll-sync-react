@@ -4,6 +4,8 @@ export interface ScrollSyncProps {
     children: React.ReactNode;
     /**syncing enable control */
     enabled?: boolean;
+    /** In case we want scroll to be proportionally applied regardless of the width and/or height*/
+    proportional?: boolean;
 }
 /**
  * node should be scrollable
