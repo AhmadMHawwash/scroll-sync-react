@@ -8,12 +8,12 @@ export const VerticalExample = () => {
   const handleRef = (el: (EventTarget & HTMLElement) | null) => (ref = el);
 
   return (
-    <ScrollSync>
-      <div onClick={() => console.log(ref)} style={{ display: 'flex', position: 'relative', height: 300 }}>
+    <ScrollSync proportional={false}>
+      <div style={{ display: 'flex', position: 'relative', height: 300 }}>
         <Banner title="Vertical Example" />
-        <ScrollSyncNode group="a" scroll="syncer-only" ref={handleRef}>
+        <ScrollSyncNode group="a" ref={handleRef}>
           <div style={{ overflow: 'auto' }}>
-            <section style={{ height: 1000 }}>
+            <section style={{ height: 1500 }}>
               <h1>This is group `a`</h1>
               <p>
                 Ahmad Hawwash Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aperiam doloribus dolorum est

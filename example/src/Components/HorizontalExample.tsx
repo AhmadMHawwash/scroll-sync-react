@@ -7,6 +7,7 @@ export const HorizontalExample = () => {
     <ScrollSync>
       <>
         <div>
+          Im self locked
           <ScrollSyncNode selfLockAxis="X">
             <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 300 }}>
               <DummyBox text="group default" />

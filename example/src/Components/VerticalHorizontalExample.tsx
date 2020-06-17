@@ -8,6 +8,7 @@ export const VerticalHorizontalExample = () => (
     <>
       <Banner title="Vertical Horizontal Example" />
       <div>
+        Im self locked
         <ScrollSyncNode selfLockAxis="XY">
           <div style={{ display: 'flex', overflowX: 'auto', flexWrap: 'nowrap', width: 300, height: 50 }}>
             <DummyBox text="default" />
