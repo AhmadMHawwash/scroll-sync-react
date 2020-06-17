@@ -54,10 +54,12 @@ const App = () =>
 
 ### ScrollSyncNode
 
-| prop   | type                                        | required | default   | description                                                    |
-| ------ | ------------------------------------------- | -------- | --------- | -------------------------------------------------------------- |
-| group  | string                                      | false    | "default" | the group of scollable elements this node will be synced with  |
-| scroll | `"two-way" | "synced-only" | "syncer-only"` | false    | "two-way" | to determine scroll configuration with other `ScrollSyncNode`s |
+| prop         | type                                      | required | default   | description                                                    |
+| ------------ | ----------------------------------------- | -------- | --------- | -------------------------------------------------------------- |
+| children     | `ReactElement`                            | true     |           | scrollable element                                             |
+| group        | string                                    | false    | "default" | the group of scollable elements this node will be synced with  |
+| scroll       | "two-way", "synced-only" or "syncer-only" | false    | "two-way" | to determine scroll configuration with other `ScrollSyncNode`s |
+| selfLockAxis | "X", "Y", "XY" or `null`                  | false    | `null`    | to specifiy current node scroll lock axis                      |
 
 ## gify example!
 
