@@ -52,6 +52,14 @@ const App = () =>
 
 ## API
 
+### ScrollSync
+
+| prop         | type           | required | default | description                                                                               |
+| ------------ | -------------- | -------- | ------- | ----------------------------------------------------------------------------------------- |
+| children     | `ReactElement` | true     |         | wrapper of to-be-synced elements                                                          |
+| enabled      | `boolean`      | false    | true    | whether syncing is enabled or not                                                         |
+| proportional | `boolean`      | false    | true    | In case we want scroll to be proportionally applied regardless of the width and/or height |
+
 ### ScrollSyncNode
 
 | prop         | type                                      | required | default   | description                                                    |
