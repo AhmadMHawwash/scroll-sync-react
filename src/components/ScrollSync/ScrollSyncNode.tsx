@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-/* eslint react/no-find-dom-node: 0 */
-
 import React, { forwardRef, useContext, useEffect, useRef } from "react";
 import { ScrollingSyncerContext } from "./ScrollSync";
+import { getMovingAxis, toArray } from "./utils";
 
 /**
  * ScrollSyncNode Component
@@ -13,34 +11,39 @@ export type ScrollConfig = "synced-only" | "syncer-only" | "two-way";
 export type LockAxis = "X" | "Y" | "XY" | null;
 
 interface ScrollSyncNodeProps {
+  /**
+   * Children
+   */
   children: React.ReactElement;
   /**
-   * groups to make the children attached to
+   * Groups to make the children attached to
    */
   group?: string | string[];
   /**
-   * if the scrolling is enabled or not
+   * If the scrolling is enabled or not
    */
   scroll?: ScrollConfig;
   /**
-   * prevent scroll on current node if axis is locked
+   * Prevent scroll on current node if axis is locked
    */
   selfLockAxis?: LockAxis;
+  /**
+   * Callback for scroll handling
+   */
+  onScroll?: (e: React.UIEvent<HTMLElement>) => void;
 }
 
-const toArray = (groups: string | string[]) => ([] as string[]).concat(groups);
-
-const getMovingAxis: (e: WheelEvent) => LockAxis = (e: WheelEvent) => {
-  if (e.deltaX > 0 || e.deltaX < 0) return "X";
-  if (e.deltaY > 0 || e.deltaY < 0) return "Y";
-  if ((e.deltaY > 0 || e.deltaY < 0) && (e.deltaX > 0 || e.deltaX < 0)) return "XY";
-  return null;
-};
-
-// eslint-disable-next-line react/display-name
 const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
   React.RefAttributes<EventTarget & HTMLElement>> = forwardRef<EventTarget & HTMLElement, ScrollSyncNodeProps>(
-  ({ children, group = "default", scroll = "two-way", selfLockAxis = null }, forwardedRef) => {
+  (props, forwardedRef) => {
+    const {
+      children,
+      group = "default",
+      scroll = "two-way",
+      selfLockAxis = null,
+      onScroll: onNodeScroll = () => undefined,
+    } = props;
+
     const { registerNode, unregisterNode, onScroll } = useContext(ScrollingSyncerContext);
 
     const ref = useRef<EventTarget & HTMLElement>(null);
@@ -75,7 +78,6 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
     }, []);
 
     useEffect(() => {
-      //@ts-ignore ref.current will difintly exist
       const syncableElement = { node: ref.current, scroll };
 
       unregisterNode(syncableElement, toArray(group));
@@ -89,10 +91,18 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
     return React.cloneElement(children, {
       ref,
       onScroll: (e: React.UIEvent<HTMLElement>) => {
-        return (isSyncer || isEnabled) && onScroll(e, toArray(group));
+        e.persist();
+        if (isSyncer || isEnabled) {
+          onScroll(e, toArray(group));
+          onNodeScroll(e);
+        }
       },
       onWheel: (e: React.UIEvent<HTMLElement>) => {
-        return (isSyncer || isEnabled) && onScroll(e, toArray(group));
+        e.persist();
+        if (isSyncer || isEnabled) {
+          onScroll(e, toArray(group));
+          onNodeScroll(e);
+        }
       },
     });
   },

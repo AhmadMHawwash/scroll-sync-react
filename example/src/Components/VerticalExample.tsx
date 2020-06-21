@@ -9,10 +9,10 @@ export const VerticalExample = () => {
 
   return (
     <ScrollSync proportional={false}>
-      <div style={{ display: 'flex', position: 'relative', height: 300 }}>
+      <div onClick={() => ref?.scrollBy(10, 10)} style={{ display: 'flex', position: 'relative', height: 300 }}>
         <Banner title="Vertical Example" />
-        <ScrollSyncNode group="a" ref={handleRef}>
-          <div style={{ overflow: 'auto' }}>
+        <ScrollSyncNode group="a" ref={handleRef} onScroll={console.log}>
+          <div style={{ overflow: 'auto' }} id="some+id">
             <section style={{ height: 1500 }}>
               <h1>This is group `a`</h1>
               <p>
@@ -24,7 +24,7 @@ export const VerticalExample = () => {
           </div>
         </ScrollSyncNode>
 
-        <ScrollSyncNode group="a">
+        <ScrollSyncNode group="a" onScroll={console.log}>
           <div style={{ overflow: 'auto' }}>
             <section style={{ height: 1000 }}>
               <h1>This is group `a`</h1>
