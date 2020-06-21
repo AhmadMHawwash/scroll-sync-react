@@ -68,6 +68,7 @@ const App = () =>
 | group        | string                                    | false    | "default" | the group of scollable elements this node will be synced with  |
 | scroll       | "two-way", "synced-only" or "syncer-only" | false    | "two-way" | to determine scroll configuration with other `ScrollSyncNode`s |
 | selfLockAxis | "X", "Y", "XY" or `null`                  | false    | `null`    | to specifiy current node scroll lock axis                      |
+| onScroll     | (event) => void                           | false    | ()=>{}    | on Node Scroll callback                                        |
 
 ## gify example!
 
