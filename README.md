@@ -80,5 +80,6 @@ A photo equals a thousand word, how about a GIF!
 - [x] Providing a codesandbox
 - [x] Configure scroll sync via `scroll` prop
 - [x] Horizontal scrolling sync
-- [x] lock axis (locking horizontal or vertical of ScrollSyncNode)
+- [x] Lock axis (locking horizontal or vertical of ScrollSyncNode)
+- [x] Adding `onScroll` node callback
 - [ ] Providing tests
