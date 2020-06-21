@@ -177,7 +177,6 @@ ScrollSync.defaultProps = {
     proportional: true,
 };
 
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 var toArray = function (groups) { return [].concat(groups); };
 var getMovingAxis = function (e) {
     if (e.deltaX > 0 || e.deltaX < 0)
@@ -188,9 +187,9 @@ var getMovingAxis = function (e) {
         return "XY";
     return null;
 };
-// eslint-disable-next-line react/display-name
-var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
-    var children = _a.children, _b = _a.group, group = _b === void 0 ? "default" : _b, _c = _a.scroll, scroll = _c === void 0 ? "two-way" : _c, _d = _a.selfLockAxis, selfLockAxis = _d === void 0 ? null : _d;
+
+var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
+    var children = props.children, _a = props.group, group = _a === void 0 ? "default" : _a, _b = props.scroll, scroll = _b === void 0 ? "two-way" : _b, _c = props.selfLockAxis, selfLockAxis = _c === void 0 ? null : _c, _d = props.onScroll, onNodeScroll = _d === void 0 ? function () { return undefined; } : _d;
     var _e = useContext(ScrollingSyncerContext), registerNode = _e.registerNode, unregisterNode = _e.unregisterNode, onScroll = _e.onScroll;
     var ref = useRef(null);
     useEffect(function () {
@@ -223,7 +222,6 @@ var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
         };
     }, []);
     useEffect(function () {
-        //@ts-ignore ref.current will difintly exist
         var syncableElement = { node: ref.current, scroll: scroll };
         unregisterNode(syncableElement, toArray(group));
         registerNode(syncableElement, toArray(group));
@@ -234,10 +232,18 @@ var ScrollSyncNode = forwardRef(function (_a, forwardedRef) {
     return React.cloneElement(children, {
         ref: ref,
         onScroll: function (e) {
-            return (isSyncer || isEnabled) && onScroll(e, toArray(group));
+            e.persist();
+            if (isSyncer || isEnabled) {
+                onScroll(e, toArray(group));
+                onNodeScroll(e);
+            }
         },
         onWheel: function (e) {
-            return (isSyncer || isEnabled) && onScroll(e, toArray(group));
+            e.persist();
+            if (isSyncer || isEnabled) {
+                onScroll(e, toArray(group));
+                onNodeScroll(e);
+            }
         },
     });
 });

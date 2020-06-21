@@ -7,19 +7,26 @@ import React from "react";
 export declare type ScrollConfig = "synced-only" | "syncer-only" | "two-way";
 export declare type LockAxis = "X" | "Y" | "XY" | null;
 interface ScrollSyncNodeProps {
+    /**
+     * Children
+     */
     children: React.ReactElement;
     /**
-     * groups to make the children attached to
+     * Groups to make the children attached to
      */
     group?: string | string[];
     /**
-     * if the scrolling is enabled or not
+     * If the scrolling is enabled or not
      */
     scroll?: ScrollConfig;
     /**
-     * prevent scroll on current node if axis is locked
+     * Prevent scroll on current node if axis is locked
      */
     selfLockAxis?: LockAxis;
+    /**
+     * Callback for scroll handling
+     */
+    onScroll?: (e: React.UIEvent<HTMLElement>) => void;
 }
 declare const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps & React.RefAttributes<EventTarget & HTMLElement>>;
 export default ScrollSyncNode;
