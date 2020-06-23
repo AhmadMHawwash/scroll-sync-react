@@ -8,7 +8,7 @@ export const VerticalExample = () => {
   const handleRef = (el: (EventTarget & HTMLElement) | null) => (ref = el);
 
   return (
-    <ScrollSync proportional={false} enabled={false}>
+    <ScrollSync proportional={false}>
       <div onClick={() => ref?.scrollBy(10, 10)} style={{ display: 'flex', position: 'relative', height: 300 }}>
         <Banner title="Vertical Example" />
         <ScrollSyncNode group="a" ref={handleRef} onScroll={console.log} selfLockAxis="XY">

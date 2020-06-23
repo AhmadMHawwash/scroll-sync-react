@@ -187,7 +187,6 @@ var getMovingAxis = function (e) {
         return "XY";
     return null;
 };
-//# sourceMappingURL=utils.js.map
 
 var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
     var children = props.children, _a = props.group, group = _a === void 0 ? "default" : _a, _b = props.scroll, scroll = _b === void 0 ? "two-way" : _b, _c = props.selfLockAxis, selfLockAxis = _c === void 0 ? null : _c, _d = props.onScroll, onNodeScroll = _d === void 0 ? function () { return undefined; } : _d;
