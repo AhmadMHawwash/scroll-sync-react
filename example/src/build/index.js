@@ -169,7 +169,7 @@ var ScrollSync = function (props) {
     return (React.createElement(ScrollingSyncerContext.Provider, { value: {
             registerNode: registerNode,
             unregisterNode: unregisterNode,
-            onScroll: function (e, groups) { return handleNodeScroll(e.currentTarget, groups); },
+            onScroll: function (e, groups) { return props.enabled && handleNodeScroll(e.currentTarget, groups); },
         } }, React.Children.only(props.children)));
 };
 ScrollSync.defaultProps = {

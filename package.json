@@ -41,6 +41,7 @@
     "start-example": "cd example && npm start",
     "deploy-example": "cd example && npm run deploy",
     "dev": "concurrently --kill-others \"npm run build-watch\" \"npm run start-example\"",
+    "start": "concurrently --kill-others \"npm run build-watch\" \"npm run start-example\"",
     "test": "ts-node test/test.ts",
     "pretest": "npm run build",
     "test:lint": "eslint ./src/**/*.ts ./src/**/*.tsx ./example/src/**/*.ts ./example/src/**/*.tsx",
