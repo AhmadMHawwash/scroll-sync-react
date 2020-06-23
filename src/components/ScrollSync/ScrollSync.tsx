@@ -6,7 +6,7 @@ import { ScrollConfig } from "./ScrollSyncNode";
 export interface ScrollSyncProps {
   children: React.ReactNode;
   /**syncing enable control */
-  enabled?: boolean;
+  disabled?: boolean;
   /** In case we want scroll to be proportionally applied regardless of the width and/or height*/
   proportional?: boolean;
 }
@@ -203,7 +203,7 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
       value={{
         registerNode,
         unregisterNode,
-        onScroll: (e, groups) => props.enabled && handleNodeScroll(e.currentTarget, groups),
+        onScroll: (e, groups) => props.disabled && handleNodeScroll(e.currentTarget, groups),
       }}
     >
       {React.Children.only(props.children)}
@@ -212,7 +212,7 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
 };
 
 ScrollSync.defaultProps = {
-  enabled: true,
+  disabled: false,
   proportional: true,
 };
 
