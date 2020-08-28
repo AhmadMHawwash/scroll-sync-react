@@ -203,7 +203,7 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
       value={{
         registerNode,
         unregisterNode,
-        onScroll: (e, groups) => props.disabled && handleNodeScroll(e.currentTarget, groups),
+        onScroll: (e, groups) => !props.disabled && handleNodeScroll(e.currentTarget, groups),
       }}
     >
       {React.Children.only(props.children)}
