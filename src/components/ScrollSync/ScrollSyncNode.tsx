@@ -46,7 +46,8 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
 
     const { registerNode, unregisterNode, onScroll } = useContext(ScrollingSyncerContext);
 
-    const ref = useRef<EventTarget & HTMLElement>(null);
+    const childRef = (children as any).ref;
+    const ref = childRef && !forwardedRef ? childRef : useRef<EventTarget & HTMLElement>(null);
 
     useEffect(() => {
       if (typeof forwardedRef === "function") {
@@ -91,6 +92,9 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
     return React.cloneElement(children, {
       ref,
       onScroll: (e: React.UIEvent<HTMLElement>) => {
+        if (typeof children.props.onScroll === "function") {
+          children.props.onScroll(e);
+        }
         e.persist();
         if (isSyncer || isEnabled) {
           onScroll(e, toArray(group));
@@ -98,6 +102,9 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
         }
       },
       onWheel: (e: React.UIEvent<HTMLElement>) => {
+        if (typeof children.props.onWheel === "function") {
+          children.props.onWheel(e);
+        }
         e.persist();
         if (isSyncer || isEnabled) {
           onScroll(e, toArray(group));

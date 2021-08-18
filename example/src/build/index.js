@@ -191,7 +191,8 @@ var getMovingAxis = function (e) {
 var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
     var children = props.children, _a = props.group, group = _a === void 0 ? "default" : _a, _b = props.scroll, scroll = _b === void 0 ? "two-way" : _b, _c = props.selfLockAxis, selfLockAxis = _c === void 0 ? null : _c, _d = props.onScroll, onNodeScroll = _d === void 0 ? function () { return undefined; } : _d;
     var _e = useContext(ScrollingSyncerContext), registerNode = _e.registerNode, unregisterNode = _e.unregisterNode, onScroll = _e.onScroll;
-    var ref = useRef(null);
+    var childRef = children.ref;
+    var ref = childRef && !forwardedRef ? childRef : useRef(null);
     useEffect(function () {
         if (typeof forwardedRef === "function") {
             forwardedRef(ref.current);
@@ -232,6 +233,9 @@ var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
     return React.cloneElement(children, {
         ref: ref,
         onScroll: function (e) {
+            if (typeof children.props.onScroll === "function") {
+                children.props.onScroll(e);
+            }
             e.persist();
             if (isSyncer || isEnabled) {
                 onScroll(e, toArray(group));
@@ -239,6 +243,9 @@ var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
             }
         },
         onWheel: function (e) {
+            if (typeof children.props.onWheel === "function") {
+                children.props.onWheel(e);
+            }
             e.persist();
             if (isSyncer || isEnabled) {
                 onScroll(e, toArray(group));
