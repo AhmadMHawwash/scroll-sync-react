@@ -3,45 +3,61 @@ import { mount } from "enzyme";
 import { ScrollSync, ScrollSyncNode } from "../src";
 
 describe("ScrollSyncNode", () => {
-  it("should support using ref on ScrollSyncNode", () => {
-    const ref = jest.fn();
-    mount(
-      <ScrollSync>
-        <ScrollSyncNode ref={ref}>
-          <div />
-        </ScrollSyncNode>
-      </ScrollSync>,
-    );
-    expect(ref).toHaveBeenCalledTimes(1);
-    expect(ref.mock.calls[0][0].toString()).toEqual("[object HTMLDivElement]");
-  });
+  describe("ref support", () => {
+    beforeEach(() => {
+      spyOn(console, "warn");
+    });
 
-  it("should support using ref on the direct child node", () => {
-    const ref = jest.fn();
-    mount(
-      <ScrollSync>
-        <ScrollSyncNode>
-          <div ref={ref} />
-        </ScrollSyncNode>
-      </ScrollSync>,
-    );
-    expect(ref).toHaveBeenCalledTimes(1);
-    expect(ref.mock.calls[0][0].toString()).toEqual("[object HTMLDivElement]");
-  });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
-  it("should only call ref on ScrollSyncNode when having duplicate refs", () => {
-    const ref1 = jest.fn();
-    const ref2 = jest.fn();
-    mount(
-      <ScrollSync>
-        <ScrollSyncNode ref={ref1}>
-          <div ref={ref2} />
-        </ScrollSyncNode>
-      </ScrollSync>,
-    );
-    expect(ref1).toHaveBeenCalledTimes(1);
-    expect(ref1.mock.calls[0][0].toString()).toEqual("[object HTMLDivElement]");
-    expect(ref2).toHaveBeenCalledTimes(0);
+    it("should support using ref on ScrollSyncNode", () => {
+      const ref = jest.fn();
+      mount(
+        <ScrollSync>
+          <ScrollSyncNode ref={ref}>
+            <div />
+          </ScrollSyncNode>
+        </ScrollSync>,
+      );
+      expect(ref).toHaveBeenCalledTimes(1);
+      expect(ref.mock.calls[0][0].toString()).toEqual("[object HTMLDivElement]");
+      expect(console.warn).toHaveBeenCalledTimes(0);
+    });
+
+    it("should support using ref on the direct child node", () => {
+      const ref = jest.fn();
+      mount(
+        <ScrollSync>
+          <ScrollSyncNode>
+            <div ref={ref} />
+          </ScrollSyncNode>
+        </ScrollSync>,
+      );
+      expect(ref).toHaveBeenCalledTimes(1);
+      expect(ref.mock.calls[0][0].toString()).toEqual("[object HTMLDivElement]");
+      expect(console.warn).toHaveBeenCalledTimes(0);
+    });
+
+    it("should only call ref on ScrollSyncNode when having duplicate refs", () => {
+      const ref1 = jest.fn();
+      const ref2 = jest.fn();
+      mount(
+        <ScrollSync>
+          <ScrollSyncNode ref={ref1}>
+            <div ref={ref2} />
+          </ScrollSyncNode>
+        </ScrollSync>,
+      );
+      expect(ref1).toHaveBeenCalledTimes(1);
+      expect(ref1.mock.calls[0][0].toString()).toEqual("[object HTMLDivElement]");
+      expect(ref2).toHaveBeenCalledTimes(0);
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn).toHaveBeenCalledWith(
+        "scroll-sync-react:\nWARNING: ref used on both ScrollSyncNode and its direct child.\nUsing the ref from the ScrollSyncNode component.",
+      );
+    });
   });
 
   it("should support using onScroll on ScrollSyncNode", () => {

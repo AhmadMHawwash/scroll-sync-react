@@ -47,6 +47,14 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
     const { registerNode, unregisterNode, onScroll } = useContext(ScrollingSyncerContext);
 
     const childRef = (children as any).ref;
+    const hasDoubleRef = childRef != null && forwardedRef != null;
+
+    if (hasDoubleRef) {
+      console.warn(
+        "scroll-sync-react:\nWARNING: ref used on both ScrollSyncNode and its direct child.\nUsing the ref from the ScrollSyncNode component.",
+      );
+    }
+
     const ref = childRef && !forwardedRef ? childRef : useRef<EventTarget & HTMLElement>(null);
 
     useEffect(() => {
