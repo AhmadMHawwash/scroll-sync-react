@@ -83,4 +83,4 @@ A photo equals a thousand word, how about a GIF!
 - [x] Horizontal scrolling sync
 - [x] Lock axis (locking horizontal or vertical of ScrollSyncNode)
 - [x] Adding `onScroll` node callback
-- [ ] Providing tests
+- [x] Providing tests
