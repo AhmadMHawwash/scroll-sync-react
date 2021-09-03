@@ -189,9 +189,10 @@ var getMovingAxis = function (e) {
 };
 
 var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
-    var children = props.children, _a = props.group, group = _a === void 0 ? "default" : _a, _b = props.scroll, scroll = _b === void 0 ? "two-way" : _b, _c = props.selfLockAxis, selfLockAxis = _c === void 0 ? null : _c, _d = props.onScroll, onNodeScroll = _d === void 0 ? function () { return undefined; } : _d;
-    var _e = useContext(ScrollingSyncerContext), registerNode = _e.registerNode, unregisterNode = _e.unregisterNode, onScroll = _e.onScroll;
-    var childRef = children.ref;
+    var _a;
+    var children = props.children, _b = props.group, group = _b === void 0 ? "default" : _b, _c = props.scroll, scroll = _c === void 0 ? "two-way" : _c, _d = props.selfLockAxis, selfLockAxis = _d === void 0 ? null : _d, _e = props.onScroll, onNodeScroll = _e === void 0 ? function () { return undefined; } : _e, render = props.render;
+    var _f = useContext(ScrollingSyncerContext), registerNode = _f.registerNode, unregisterNode = _f.unregisterNode, onScroll = _f.onScroll;
+    var childRef = (_a = children) === null || _a === void 0 ? void 0 : _a.ref;
     var hasDoubleRef = childRef != null && forwardedRef != null;
     if (hasDoubleRef) {
         console.warn("scroll-sync-react:\nWARNING: ref used on both ScrollSyncNode and its direct child.\nUsing the ref from the ScrollSyncNode component.");
@@ -234,28 +235,35 @@ var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
     }, [scroll, group]);
     var isSyncer = scroll === "syncer-only";
     var isEnabled = scroll === "two-way";
+    var _onScroll = function (e) {
+        if (typeof (children === null || children === void 0 ? void 0 : children.props.onScroll) === "function") {
+            children.props.onScroll(e);
+        }
+        e.persist();
+        if (isSyncer || isEnabled) {
+            onScroll(e, toArray(group));
+            onNodeScroll(e);
+        }
+    };
+    var _onWheel = function (e) {
+        if (typeof (children === null || children === void 0 ? void 0 : children.props.onWheel) === "function") {
+            children.props.onWheel(e);
+        }
+        e.persist();
+        if (isSyncer || isEnabled) {
+            onScroll(e, toArray(group));
+            onNodeScroll(e);
+        }
+    };
+    if (render) {
+        return render({ ref: ref, onScroll: _onScroll, onWheel: _onWheel });
+    }
+    if (!children)
+        throw new Error("Children can not be undefined if render prop has not bee passed");
     return React.cloneElement(children, {
         ref: ref,
-        onScroll: function (e) {
-            if (typeof children.props.onScroll === "function") {
-                children.props.onScroll(e);
-            }
-            e.persist();
-            if (isSyncer || isEnabled) {
-                onScroll(e, toArray(group));
-                onNodeScroll(e);
-            }
-        },
-        onWheel: function (e) {
-            if (typeof children.props.onWheel === "function") {
-                children.props.onWheel(e);
-            }
-            e.persist();
-            if (isSyncer || isEnabled) {
-                onScroll(e, toArray(group));
-                onNodeScroll(e);
-            }
-        },
+        onScroll: _onScroll,
+        onWheel: _onWheel,
     });
 });
 ScrollSyncNode.displayName = "ScrollSyncNode";

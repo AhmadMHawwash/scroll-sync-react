@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, useEffect, useRef } from "react";
+import React, { forwardRef, JSXElementConstructor, ReactElement, useContext, useEffect, useRef } from "react";
 import { ScrollingSyncerContext } from "./ScrollSync";
 import { getMovingAxis, toArray } from "./utils";
 
@@ -10,11 +10,17 @@ import { getMovingAxis, toArray } from "./utils";
 export type ScrollConfig = "synced-only" | "syncer-only" | "two-way";
 export type LockAxis = "X" | "Y" | "XY" | null;
 
-interface ScrollSyncNodeProps {
+export interface ScrollSyncNodeRenderProps {
+  onScroll: (e: React.UIEvent<any>) => void;
+  onWheel: (e: React.UIEvent<any>) => void;
+  ref: React.MutableRefObject<any>;
+}
+
+export interface ScrollSyncNodeProps {
   /**
    * Children
    */
-  children: React.ReactElement;
+  children?: React.ReactElement;
   /**
    * Groups to make the children attached to
    */
@@ -31,6 +37,8 @@ interface ScrollSyncNodeProps {
    * Callback for scroll handling
    */
   onScroll?: (e: React.UIEvent<HTMLElement>) => void;
+
+  render?: (props: ScrollSyncNodeRenderProps) => ReactElement<any, string | JSXElementConstructor<any>> | null;
 }
 
 const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
@@ -42,11 +50,12 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
       scroll = "two-way",
       selfLockAxis = null,
       onScroll: onNodeScroll = () => undefined,
+      render,
     } = props;
 
     const { registerNode, unregisterNode, onScroll } = useContext(ScrollingSyncerContext);
 
-    const childRef = (children as any).ref;
+    const childRef = (children as any)?.ref;
     const hasDoubleRef = childRef != null && forwardedRef != null;
 
     if (hasDoubleRef) {
@@ -97,28 +106,36 @@ const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps &
     const isSyncer = scroll === "syncer-only";
     const isEnabled = scroll === "two-way";
 
+    const _onScroll = (e: React.UIEvent<HTMLElement>) => {
+      if (typeof children?.props.onScroll === "function") {
+        children.props.onScroll(e);
+      }
+      e.persist();
+      if (isSyncer || isEnabled) {
+        onScroll(e, toArray(group));
+        onNodeScroll(e);
+      }
+    };
+
+    const _onWheel = (e: React.UIEvent<HTMLElement>) => {
+      if (typeof children?.props.onWheel === "function") {
+        children.props.onWheel(e);
+      }
+      e.persist();
+      if (isSyncer || isEnabled) {
+        onScroll(e, toArray(group));
+        onNodeScroll(e);
+      }
+    };
+
+    if (render) {
+      return render({ ref, onScroll: _onScroll, onWheel: _onWheel });
+    }
+    if (!children) throw new Error("Children can not be undefined if render prop has not bee passed");
     return React.cloneElement(children, {
       ref,
-      onScroll: (e: React.UIEvent<HTMLElement>) => {
-        if (typeof children.props.onScroll === "function") {
-          children.props.onScroll(e);
-        }
-        e.persist();
-        if (isSyncer || isEnabled) {
-          onScroll(e, toArray(group));
-          onNodeScroll(e);
-        }
-      },
-      onWheel: (e: React.UIEvent<HTMLElement>) => {
-        if (typeof children.props.onWheel === "function") {
-          children.props.onWheel(e);
-        }
-        e.persist();
-        if (isSyncer || isEnabled) {
-          onScroll(e, toArray(group));
-          onNodeScroll(e);
-        }
-      },
+      onScroll: _onScroll,
+      onWheel: _onWheel,
     });
   },
 );

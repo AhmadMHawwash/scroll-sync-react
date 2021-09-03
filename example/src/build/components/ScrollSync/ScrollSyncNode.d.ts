@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSXElementConstructor, ReactElement } from "react";
 /**
  * ScrollSyncNode Component
  *
@@ -6,11 +6,16 @@ import React from "react";
  */
 export declare type ScrollConfig = "synced-only" | "syncer-only" | "two-way";
 export declare type LockAxis = "X" | "Y" | "XY" | null;
-interface ScrollSyncNodeProps {
+export interface ScrollSyncNodeRenderProps {
+    onScroll: (e: React.UIEvent<any>) => void;
+    onWheel: (e: React.UIEvent<any>) => void;
+    ref: React.MutableRefObject<any>;
+}
+export interface ScrollSyncNodeProps {
     /**
      * Children
      */
-    children: React.ReactElement;
+    children?: React.ReactElement;
     /**
      * Groups to make the children attached to
      */
@@ -27,6 +32,7 @@ interface ScrollSyncNodeProps {
      * Callback for scroll handling
      */
     onScroll?: (e: React.UIEvent<HTMLElement>) => void;
+    render?: (props: ScrollSyncNodeRenderProps) => ReactElement<any, string | JSXElementConstructor<any>> | null;
 }
 declare const ScrollSyncNode: React.ForwardRefExoticComponent<ScrollSyncNodeProps & React.RefAttributes<EventTarget & HTMLElement>>;
 export default ScrollSyncNode;
