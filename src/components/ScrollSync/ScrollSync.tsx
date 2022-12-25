@@ -111,6 +111,11 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
         elements[group] = [];
       }
 
+      const existingElement = elements[group][0];
+      if (existingElement) {
+        syncScrollPosition(existingElement.node, element.node)
+      }
+
       elements[group].push({ ...element });
     });
   };
