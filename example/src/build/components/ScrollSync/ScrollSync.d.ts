@@ -39,7 +39,7 @@ export declare const ScrollingSyncerContext: React.Context<ScrollingSyncerContex
 /**
  * ScrollSync component is a context based component,
  * that wrappes children to be .Provided with context utils and eventsHandlers
- * @param props ScrollSyncProps
+ * @param propsIn ScrollSyncProps
  */
 export declare const ScrollSync: FC<ScrollSyncProps>;
 export default ScrollSync;

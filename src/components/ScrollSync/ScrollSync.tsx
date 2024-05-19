@@ -53,11 +53,19 @@ export const ScrollingSyncerContext: React.Context<ScrollingSyncerContextValues>
 });
 
 /**
+ * Default properties.
+ */
+const DEFAULT_PROPS = {
+  disabled: false,
+  proportional: true,
+};
+
+/**
  * ScrollSync component is a context based component,
  * that wrappes children to be .Provided with context utils and eventsHandlers
- * @param props ScrollSyncProps
+ * @param propsIn ScrollSyncProps
  */
-export const ScrollSync: FC<ScrollSyncProps> = props => {
+export const ScrollSync: FC<ScrollSyncProps> = propsIn => {
   /**
    * a map of group: and it's nodes
    * {
@@ -66,6 +74,7 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
    *  groupC: [node1, node4],
    * }
    */
+  const props = { ...DEFAULT_PROPS, ...propsIn };
   const nodesRef = useRef<RecordMap<SyncableElement[]>>({});
   const elements = nodesRef.current;
   /**
@@ -209,11 +218,6 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
       {React.Children.only(props.children)}
     </ScrollingSyncerContext.Provider>
   );
-};
-
-ScrollSync.defaultProps = {
-  disabled: false,
-  proportional: true,
 };
 
 export default ScrollSync;

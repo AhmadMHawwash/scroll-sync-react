@@ -1,2 +1,2 @@
-import { ScrollSync, ScrollSyncNode } from "./components/ScrollSync";
+import { ScrollSync, ScrollSyncNode } from './components/ScrollSync';
 export { ScrollSync, ScrollSyncNode };

@@ -36,11 +36,18 @@ var ScrollingSyncerContext = React.createContext({
     onScroll: function (_e, _groups) { },
 });
 /**
+ * Default properties.
+ */
+var DEFAULT_PROPS = {
+    disabled: false,
+    proportional: true,
+};
+/**
  * ScrollSync component is a context based component,
  * that wrappes children to be .Provided with context utils and eventsHandlers
- * @param props ScrollSyncProps
+ * @param propsIn ScrollSyncProps
  */
-var ScrollSync = function (props) {
+var ScrollSync = function (propsIn) {
     /**
      * a map of group: and it's nodes
      * {
@@ -49,6 +56,7 @@ var ScrollSync = function (props) {
      *  groupC: [node1, node4],
      * }
      */
+    var props = __assign(__assign({}, DEFAULT_PROPS), propsIn);
     var nodesRef = useRef({});
     var elements = nodesRef.current;
     /**
@@ -171,10 +179,6 @@ var ScrollSync = function (props) {
             unregisterNode: unregisterNode,
             onScroll: function (e, groups) { return !props.disabled && handleNodeScroll(e.currentTarget, groups); },
         } }, React.Children.only(props.children)));
-};
-ScrollSync.defaultProps = {
-    disabled: false,
-    proportional: true,
 };
 
 var toArray = function (groups) { return [].concat(groups); };
