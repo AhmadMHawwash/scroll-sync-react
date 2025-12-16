@@ -40,7 +40,8 @@ var ScrollingSyncerContext = React.createContext({
  * that wrappes children to be .Provided with context utils and eventsHandlers
  * @param props ScrollSyncProps
  */
-var ScrollSync = function (props) {
+var ScrollSync = function (_a) {
+    var _b = _a.disabled, disabled = _b === void 0 ? false : _b, _c = _a.proportional, proportional = _c === void 0 ? true : _c, children = _a.children;
     /**
      * a map of group: and it's nodes
      * {
@@ -119,7 +120,7 @@ var ScrollSync = function (props) {
         if (!scrolledNode || !node)
             return;
         var scrollTop = scrolledNode.scrollTop, scrollHeight = scrolledNode.scrollHeight, offsetHeight = scrolledNode.offsetHeight, scrollLeft = scrolledNode.scrollLeft, scrollWidth = scrolledNode.scrollWidth, offsetLeft = scrolledNode.offsetLeft, offsetWidth = scrolledNode.offsetWidth;
-        if (!props.proportional) {
+        if (!proportional) {
             node.scrollLeft = scrollLeft;
             node.scrollTop = scrollTop;
             return;
@@ -169,12 +170,8 @@ var ScrollSync = function (props) {
     return (React.createElement(ScrollingSyncerContext.Provider, { value: {
             registerNode: registerNode,
             unregisterNode: unregisterNode,
-            onScroll: function (e, groups) { return !props.disabled && handleNodeScroll(e.currentTarget, groups); },
-        } }, React.Children.only(props.children)));
-};
-ScrollSync.defaultProps = {
-    disabled: false,
-    proportional: true,
+            onScroll: function (e, groups) { return !disabled && handleNodeScroll(e.currentTarget, groups); },
+        } }, React.Children.only(children)));
 };
 
 var toArray = function (groups) { return [].concat(groups); };
@@ -191,7 +188,7 @@ var getMovingAxis = function (e) {
 var ScrollSyncNode = forwardRef(function (props, forwardedRef) {
     var children = props.children, _a = props.group, group = _a === void 0 ? "default" : _a, _b = props.scroll, scroll = _b === void 0 ? "two-way" : _b, _c = props.selfLockAxis, selfLockAxis = _c === void 0 ? null : _c, _d = props.onScroll, onNodeScroll = _d === void 0 ? function () { return undefined; } : _d;
     var _e = useContext(ScrollingSyncerContext), registerNode = _e.registerNode, unregisterNode = _e.unregisterNode, onScroll = _e.onScroll;
-    var childRef = children.ref;
+    var childRef = children.props.ref;
     var hasDoubleRef = childRef != null && forwardedRef != null;
     if (hasDoubleRef) {
         console.warn("scroll-sync-react:\nWARNING: ref used on both ScrollSyncNode and its direct child.\nUsing the ref from the ScrollSyncNode component.");

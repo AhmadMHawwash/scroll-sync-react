@@ -57,7 +57,7 @@ export const ScrollingSyncerContext: React.Context<ScrollingSyncerContextValues>
  * that wrappes children to be .Provided with context utils and eventsHandlers
  * @param props ScrollSyncProps
  */
-export const ScrollSync: FC<ScrollSyncProps> = props => {
+export const ScrollSync: FC<ScrollSyncProps> = ({ disabled = false, proportional = true, children }) => {
   /**
    * a map of group: and it's nodes
    * {
@@ -146,7 +146,7 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
 
     const { scrollTop, scrollHeight, offsetHeight, scrollLeft, scrollWidth, offsetLeft, offsetWidth } = scrolledNode;
 
-    if (!props.proportional) {
+    if (!proportional) {
       node.scrollLeft = scrollLeft;
       node.scrollTop = scrollTop;
       return;
@@ -203,17 +203,12 @@ export const ScrollSync: FC<ScrollSyncProps> = props => {
       value={{
         registerNode,
         unregisterNode,
-        onScroll: (e, groups) => !props.disabled && handleNodeScroll(e.currentTarget, groups),
+        onScroll: (e, groups) => !disabled && handleNodeScroll(e.currentTarget, groups),
       }}
     >
-      {React.Children.only(props.children)}
+      {React.Children.only(children)}
     </ScrollingSyncerContext.Provider>
   );
-};
-
-ScrollSync.defaultProps = {
-  disabled: false,
-  proportional: true,
 };
 
 export default ScrollSync;
